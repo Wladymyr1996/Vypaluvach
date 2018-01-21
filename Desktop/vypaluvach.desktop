@@ -1,0 +1,20 @@
+[Desktop Entry]
+Categories=Graphics;Qt;
+Exec=vypaluvach
+GenericName=Vypaluvach
+Comment=Program for CNC woodburner
+Icon=vypaluvach
+Name=Vypaluvach
+Terminal=false
+Type=Application
+StartupNotify=false
+StartupWMClass=vypaluvach
+
+# Translations
+Comment[ru]=Программа для выжигания на ЧПУ выжигателе
+GenericName[ru]=vypaluvach
+Name[ru]=Vypaluvach
+Comment[uk]=Програма для випалювання на ЧПК випалювачі
+GenericName[uk]=Випалювач
+Name[uk]=Випалювач
+

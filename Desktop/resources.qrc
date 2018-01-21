@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/console.png</file>
+        <file>img/help.png</file>
+        <file>img/lang.png</file>
+        <file>img/lEnglish.png</file>
+        <file>img/lRussian.png</file>
+        <file>img/lUkrainian.png</file>
+        <file>img/open.png</file>
+        <file>img/palay.png</file>
+        <file>img/return.png</file>
+        <file>img/set_Zero.png</file>
+        <file>img/setting_connect.png</file>
+        <file>img/setting.png</file>
+        <file>img/test proportion.png</file>
+        <file>img/logo.png</file>
+        <file>img/marker.png</file>
+        <file>img/SimpleMarker.png</file>
+        <file>img/icon.png</file>
+        <file>img/retToZero.png</file>
+    </qresource>
+    <qresource prefix="/lang">
+        <file>Vypaluvach_uk.qm</file>
+        <file>Vypaluvach_ru.qm</file>
+        <file>Vypaluvach_en.qm</file>
+    </qresource>
+</RCC>

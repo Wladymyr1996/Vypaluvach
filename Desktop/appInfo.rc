@@ -1,0 +1,27 @@
+IDI_ICON1 ICON DISCARDABLE "img\VYpaluvach.ico"
+
+#include <windows.h>
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION 2,0,3
+PRODUCTVERSION 2,0,3
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName", "VolodyaSTD"
+            VALUE "LegalCopyright", "Volodymyr Stdnyk"
+            VALUE "FileDescription", "Control program for CNC wood burner"
+            VALUE "FileVersion", "2.0-3"
+            VALUE "ProductName", "Vypaluvach"
+            VALUE "ProductVersion", "2.0-3"
+        END
+    END
+
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x422, 1251, 0x409, 1251, 0x419, 1251
+    END
+END

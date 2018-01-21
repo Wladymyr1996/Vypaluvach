@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainFrame</class>
+ <widget class="QMainWindow" name="MainFrame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>602</width>
+    <height>454</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::NoFocus</enum>
+  </property>
+  <property name="windowTitle">
+   <string>MainFrame</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>602</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpenImage"/>
+    <addaction name="separator"/>
+    <addaction name="actionClose_app"/>
+   </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionApp_settings"/>
+    <addaction name="action_Serial_settings"/>
+    <addaction name="separator"/>
+    <addaction name="action_Proportion_test"/>
+   </widget>
+   <widget class="QMenu" name="menuControl">
+    <property name="title">
+     <string>&amp;Control</string>
+    </property>
+    <addaction name="actionSetCenter"/>
+    <addaction name="actionReturn_to_zero"/>
+    <addaction name="actionBegin_burn"/>
+    <addaction name="actionContinue_burn"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <widget class="QMenu" name="menuLanguage">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+     <property name="icon">
+      <iconset resource="resources.qrc">
+       <normaloff>:/img/lang.png</normaloff>:/img/lang.png</iconset>
+     </property>
+     <addaction name="actionEnglish"/>
+     <addaction name="actionUkrainian"/>
+     <addaction name="actionRussian"/>
+    </widget>
+    <addaction name="action_Help"/>
+    <addaction name="menuLanguage"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout_author"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menuSettings"/>
+   <addaction name="menuControl"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionOpenImage">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/open.png</normaloff>:/img/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open image</string>
+   </property>
+  </action>
+  <action name="actionClose_app">
+   <property name="text">
+    <string>&amp;Close app</string>
+   </property>
+  </action>
+  <action name="actionApp_settings">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/setting.png</normaloff>:/img/setting.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;App settings</string>
+   </property>
+  </action>
+  <action name="action_Serial_settings">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/setting_connect.png</normaloff>:/img/setting_connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Serial settings</string>
+   </property>
+  </action>
+  <action name="action_Proportion_test">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/test proportion.png</normaloff>:/img/test proportion.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Proportion test</string>
+   </property>
+  </action>
+  <action name="actionSetCenter">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/set_Zero.png</normaloff>:/img/set_Zero.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Set as zero</string>
+   </property>
+  </action>
+  <action name="actionBegin_burn">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/palay.png</normaloff>:/img/palay.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Begin burn</string>
+   </property>
+  </action>
+  <action name="actionContinue_burn">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/return.png</normaloff>:/img/return.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Continue burn</string>
+   </property>
+  </action>
+  <action name="action_Help">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/help.png</normaloff>:/img/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Help</string>
+   </property>
+  </action>
+  <action name="actionAbout_author">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/help.png</normaloff>:/img/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About vypaluvach</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/lEnglish.png</normaloff>:/img/lEnglish.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;English</string>
+   </property>
+  </action>
+  <action name="actionUkrainian">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/lUkrainian.png</normaloff>:/img/lUkrainian.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Ukrainian</string>
+   </property>
+  </action>
+  <action name="actionRussian">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/lRussian.png</normaloff>:/img/lRussian.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Russian</string>
+   </property>
+  </action>
+  <action name="actionReturn_to_zero">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/img/retToZero.png</normaloff>:/img/retToZero.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Return to zero</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
