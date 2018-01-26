@@ -1,3 +1,22 @@
+/*
+    "Vypaluvach" - is control program for CNC wood burner "CNC Vypaluvach"
+    Copyright (C) 2017 Volodymyr Stadnyk
+    e-mail: Wladymyr1996@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>
+*/
+
 #include "mc.h"
 #include <QDebug>
 #include <QThread>
@@ -16,18 +35,16 @@ MainClass::MainClass(QObject *parent) : QObject(parent)
     Status = SMenu;
 
     //Ініціалізація класів інтерфейсу користувача в інших потоках
-    Keyboard = new keyboardUI();
     QThread *th = new QThread;
-    Keyboard->moveToThread(th);
-    th->start();
-
     LCD = new lcdUI;
-    th = new QThread;
     LCD->moveToThread(th);
     th->start();
 
-    Buzzer = new beepUI;
     th = new QThread;
+    Keyboard = new keyboardUI();
+    Keyboard->moveToThread(th);
+
+    Buzzer = new beepUI;
     Buzzer->moveToThread(th);
     th->start();
 
@@ -35,16 +52,12 @@ MainClass::MainClass(QObject *parent) : QObject(parent)
 
     //З'єдання  усіх сигналів зі слотами
 
-    connect(this, SIGNAL(runKeyboard()),
-            Keyboard, SLOT(run()));
     connect(Keyboard, SIGNAL(keyPressed(int)),
             SLOT(keyPressed(int)));
     connect(Keyboard, SIGNAL(keyRelease(int)),
             SLOT(keyRealease(int)));
     connect(Keyboard, SIGNAL(beep()),
             Buzzer, SLOT(beep()));
-
-
     connect(this, SIGNAL(clearLCD()),
             LCD, SLOT(clear()));
     connect(this, SIGNAL(printLCD(QString,int,int,int)),
@@ -65,10 +78,11 @@ MainClass::MainClass(QObject *parent) : QObject(parent)
             SLOT(newYLine(int)));
     connect(cnc, SIGNAL(endPrint(bool)),
             SLOT(endPrint(bool)));
+    connect(cnc, SIGNAL(message(QString)),
+            SLOT(showMessage(QString)));
     connect(this, SIGNAL(doShutDown()),
             ShutDown, SLOT(doShutDown()));
 
-    emit runKeyboard();
     QThread::sleep(2);
     selectMainMenu();
 
@@ -129,7 +143,7 @@ void MainClass::printPrinting()
     while (line.length() < 16 - str.length()) line += " ";
     emit printLCD(line + str, 0, 0, 16);
 
-    int procentd2 = (50 * (currentLine - cnc->getBeginLine())) / lines->count();
+    int procentd2 = (50 * (currentLine - cnc->getBeginLine())) / (lines->count() - cnc->getBeginLine());
     line= "[";
     int full = procentd2/5;
     for (int i = 0; i<full; i++) line += (char)0x04;
@@ -137,7 +151,7 @@ void MainClass::printPrinting()
     while (line.length()<11) line+=(char)0x06;
     line+="]";
 
-    str = QString::number((100 * (currentLine - cnc->getBeginLine())) / lines->count())+"%";
+    str = QString::number((100 * (currentLine - cnc->getBeginLine())) / (lines->count() - cnc->getBeginLine()))+"%";
     while (line.length()<16-str.length()) line += " ";
     emit printLCD(line + str, 0, 1, 16);
 }
@@ -206,6 +220,7 @@ void MainClass::setEdit()
         }
         CurrentEdit.type = EReturnLine;
         CurrentEdit.name = "Return line";
+        CurrentEdit.value = QString::number(AllData->getLastLine());
         break;
     default:
     break;
@@ -371,11 +386,14 @@ void MainClass::saveEditValue()
         break;
     case EReturnLine:
         cnc->startPrint(lines, CurrentEdit.value.toInt());
+        currentLine = CurrentEdit.value.toInt();
         Status = SPrinting;
         printPrinting();
+        break;
     case EScreenTime:
         AllData->setScreenTime(CurrentEdit.value.toInt());
         selectSettigns();
+        break;
     }
     AllData->saveAll();
 }
@@ -417,9 +435,13 @@ void MainClass::newYLine(int Y)
     printPrinting();
 }
 
-void MainClass::endPrint(bool)
+void MainClass::endPrint(bool stopped)
 {
     emit onFinalBeeps();
+    if (stopped) {
+        AllData->setLastLine(currentLine);
+        AllData->saveAll();
+    }
     selectMainMenu();
 }
 
@@ -523,6 +545,7 @@ void MainClass::startBurn()
         return;
     }
     cnc->startPrint(lines);
+    currentLine = 0;
     Status = SPrinting;
     printPrinting();
     emit onBrightLCD();
@@ -616,10 +639,10 @@ void MainClass::keyPressed(int k)
         return;
     }
     if (Status == SMoving) {
-        if (k == keyboardUI::KEY_4) cnc->move(cncleft);
-        if (k == keyboardUI::KEY_2) cnc->move(cncup);
-        if (k == keyboardUI::KEY_6) cnc->move(cncright);
-        if (k == keyboardUI::KEY_8) cnc->move(cncdown);
+        if (k == keyboardUI::KEY_4) cnc->move(cncright);
+        if (k == keyboardUI::KEY_2) cnc->move(cncdown);
+        if (k == keyboardUI::KEY_6) cnc->move(cncleft);
+        if (k == keyboardUI::KEY_8) cnc->move(cncup);
 
         if (k == keyboardUI::KEY_0) cnc->setCurrentPosAsZero();
         if (k == keyboardUI::KEY_B) {

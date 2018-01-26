@@ -1,3 +1,22 @@
+/*
+    "Vypaluvach" - is control program for CNC wood burner "CNC Vypaluvach"
+    Copyright (C) 2017 Volodymyr Stadnyk
+    e-mail: Wladymyr1996@gmail.com
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>
+*/
+
 #include "ui.h"
 #include "gpio/gpio_lib.c"
 #include "i2c/i2c_lib.c"
@@ -127,6 +146,8 @@ void lcdUI::BrightOn()
 
     if (AllData->getScreenTime() != 0)
         emit brightTimerStart(AllData->getScreenTime()*1000);
+    else
+        emit brightTimerStop();
     bright = 1;
     lcdWriteBright();
 }
@@ -164,6 +185,9 @@ keyboardUI::keyboardUI(QObject *parent) : QObject(parent) {
         sunxi_gpio_set_cfgpin(SUNXI_GPA(13), SUNXI_GPIO_INPUT);
     }
 
+    connect(&keyReadTimer, SIGNAL(timeout()),
+            SLOT(run()));
+    keyReadTimer.start(50);
 }
 
 //Надискання на кнопку клавіатури
@@ -179,8 +203,6 @@ void keyboardUI::click(keyboardUI::Key k, int GPIO)
 
 //Цикл обробки натискань клаіатури
 void keyboardUI::run() {
-    emit beep();
-    for(;;) {
         sunxi_gpio_output(SUNXI_GPA(19), 0);
         sunxi_gpio_output(SUNXI_GPG(6), 1);
 
@@ -212,7 +234,6 @@ void keyboardUI::run() {
         if (sunxi_gpio_input(SUNXI_GPA(13)) == 1) click(KEY_7, 13);
         if (sunxi_gpio_input(SUNXI_GPA(2)) == 1) click(KEY_4, 2);
         if (sunxi_gpio_input(SUNXI_GPA(14)) == 1) click(KEY_1, 14);
-    }
 }
 
 beepUI::beepUI(QObject *parent) : QObject(parent)

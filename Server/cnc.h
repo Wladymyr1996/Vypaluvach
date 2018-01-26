@@ -47,6 +47,10 @@
 #define cBuzzerOff 0x11  //Вимкнути сповіщення
 #define csetMS 0x12
 #define cshutdownOPI 0x13
+#define cprePrint 0x14
+#define csetPrePrintingZero 0x15
+#define cprintPause 0x16
+#define cprintEnd 0x17
 
 //Відповіді від ЧПК
 #define msgEnd 'f'
@@ -107,6 +111,7 @@ public:
 private:
     void setLine(int yp);
     void setBaudRate(int BaudRate);
+    void setPrePrintingZero();
     void sendSkippedYSteps();
     void sendCommand(QByteArray *arr, bool deleteThis = false);
     void sendCommand(QByteArray arr);

@@ -42,6 +42,7 @@ TAllData::TAllData(QObject *parent) : QObject(parent)
         MS = AppSettings->value("/MS", 0).toInt();
         PrePrintingPause = AppSettings->value("/PrePrintingPause", 30).toInt();
         screenTime = AppSettings->value("/ScreenTime", 10).toInt();
+        lastLine = AppSettings->value("/LastLine", 0).toInt();
     AppSettings->endGroup();
 
     AppSettings->beginGroup("/CNCSettings");
@@ -77,6 +78,7 @@ void TAllData::saveAll()
         AppSettings->setValue("/MS", MS);
         AppSettings->setValue("/PrePrintingPause", PrePrintingPause);
         AppSettings->setValue("/ScreenTime", screenTime);
+        AppSettings->setValue("/LastLine", lastLine);
     AppSettings->endGroup();
 
     AppSettings->beginGroup("/CNCSettings");
@@ -236,6 +238,16 @@ void TAllData::setPrePrintingPause(int pause)
 void TAllData::setCColors()
 {
     CColors = MaxSpeedPerX - MinSpeedPerX;
+}
+
+int TAllData::getLastLine()
+{
+    return lastLine;
+}
+
+void TAllData::setLastLine(int value)
+{
+    lastLine = value;
 }
 
 int TAllData::getScreenTime()

@@ -71,13 +71,16 @@ public:
     int getScreenTime();
     void setScreenTime(int value);
 
+    int getLastLine();
+    void setLastLine(int value);
+
 private:
     void setCColors();
     bool GetPos;
     QString PortName;
     int MaxCountStepsX, MaxCountStepsY, MaxSpeedPerX, MinSpeedPerX, SkippedYSteps,
         SkippedLines, CColors, Marker, BaudRate, BaudRateIndex, PrePrintingPause,
-        screenTime;
+        screenTime, lastLine;
     QRect WindowGeometry;
     char MS;
 

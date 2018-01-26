@@ -143,7 +143,11 @@ void CNC::stop()
         }
         status = Stoped;
         port->waitForBytesWritten(1000);
-        sendCommand(new QByteArray(1, creturntoXzero), true);
+        if (PrintingWait->isActive()) {
+            PrintingWait->stop();
+            yps->clear();
+        }
+        sendCommand(new QByteArray(1, cprintPause), true);
     }
 }
 
@@ -269,11 +273,20 @@ void CNC::startPrint(QList<QList<ColorLine *> *> *lines, int beginLine)
     TransferData = new QQueue<QByteArray>;
     yps = new QQueue<int>;
 
-    setLine(beginLine);
+    sendSkippedYSteps();
+    setGetPos();
+    setMS();
 
     if (!isBusy()) {
-        status = Printing;
         setHeadOn();
+        QThread::msleep(500);
+        if (beginLine == 0) {
+            setCurrentPosAsZero();
+	    sendCommand(QByteArray(1, (char)cprePrint));
+	}
+        else
+            sendCommand(QByteArray(1, (char)csetPrePrintingZero));
+        status = Printing;
         PrintingWait->start(AllData->getPrePrintingPause()*1000);
     }
 }
@@ -319,7 +332,11 @@ void CNC::setHeadOff()
 
 void CNC::doPrinting()
 {
-    for (int cy = beginLine/AllData->getSkippedLines(); cy < lines->count()/AllData->getSkippedLines(); cy++) {
+    returnToZero();
+    setLine(beginLine);
+    PrintingWait->stop();
+    int cy;
+    for (cy = beginLine/AllData->getSkippedLines(); cy < lines->count()/AllData->getSkippedLines(); cy++) {
         int y = cy * AllData->getSkippedLines();
         for (int x = 0; x < lines->at(y)->count(); x++) {
             QByteArray tmp;
@@ -338,7 +355,8 @@ void CNC::doPrinting()
         TransferData->enqueue(QByteArray(1, cendline));
         yps->enqueue(cy);
     }
-    TransferData->enqueue(QByteArray(1, creturn_to_zero));
+    TransferData->enqueue(QByteArray(1, cprintEnd));
+    yps->enqueue(cy);
 
     for (int i=0; i<10; i++) sendNextLine();
 }
@@ -383,8 +401,6 @@ void CNC::canReadData()
                     emit endPrint(false);
                     setGetPos(false);
                     setHeadOff();
-                    setBuzzerOn();
-                    setBuzzerOff();
                     setGetPos();
                     emit message("Printing succes!");
                     HeadTimer->start(5000);
@@ -394,13 +410,10 @@ void CNC::canReadData()
                     emit endPrint(true);
                     setGetPos(false);
                     setHeadOff();
-                    setBuzzerOn();
-                    setBuzzerOff();
                     setGetPos();
                     emit message("Printing stoped!");
                 }
-            }
-//            qDebug() << "CNC: end";
+           }
         } else
         if (data.at(i) == msgPos) {
             if (i+4<data.count()) {
