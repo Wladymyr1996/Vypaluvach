@@ -29,5 +29,6 @@ a=`cat /etc/rc.local | grep 'sudo OPiVypaluvach'`
 if [ "$a" = '' ]
 then
 	sed 13i\ 'sudo OPiVypaluvach' /etc/rc.local >> tmp.local && mv tmp.local /etc/rc.local
+	chmod +x /etc/rc.local
 fi
 
