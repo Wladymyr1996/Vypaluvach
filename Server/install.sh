@@ -15,6 +15,7 @@ fi
 
 make 
 if [ $? != 0 ]
+then
 	echo "[ERROR] - make error."
 	make clear
 	exit
@@ -26,7 +27,7 @@ cp OPiVypaluvach /usr/bin/OPiVypaluvach
 
 a=`cat /etc/rc.local | grep 'sudo OPiVypaluvach'`
 if [ "$a" = '' ]
-then  
+then
 	sed 13i\ 'sudo OPiVypaluvach' /etc/rc.local >> tmp.local && mv tmp.local /etc/rc.local
 fi
 
