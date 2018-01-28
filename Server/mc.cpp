@@ -518,6 +518,10 @@ void MainClass::setBaudRate()
     AllData->setBaudRate(BaudRate);
     AllData->setBaudRateIndex(CurrentMenu->CurrentItem);
     AllData->saveAll();
+
+    cnc->close();
+    cnc->TryConnect();
+
     selectSettigns();
 }
 
