@@ -56,6 +56,8 @@ MainClass::MainClass(QObject *parent) : QObject(parent)
             SLOT(keyPressed(int)));
     connect(Keyboard, SIGNAL(keyRelease(int)),
             SLOT(keyRealease(int)));
+    connect(Keyboard, SIGNAL(keyPressed(int)),
+            LCD, SLOT(BrightOn()));
     connect(Keyboard, SIGNAL(beep()),
             Buzzer, SLOT(beep()));
     connect(this, SIGNAL(clearLCD()),
@@ -560,7 +562,6 @@ void MainClass::returnToZero()
 //Обробка сигналів клавіатури
 void MainClass::keyPressed(int k)
 {
-    emit onBrightLCD();
     if (Status == SMenu) {
         emit offFinalBeeps();
 

@@ -134,7 +134,6 @@ void lcdUI::BrightOn()
 {
     if (brightTimer == NULL) {
         brightTimer = new QTimer;
-        brightTimer->moveToThread(this->thread());
         connect(brightTimer, SIGNAL(timeout()),
                 SLOT(BrightOff()));
         connect(this, SIGNAL(brightTimerStart(int)),
@@ -144,12 +143,13 @@ void lcdUI::BrightOn()
 
     }
 
+    bright = 1;
+    lcdWriteBright();
+
     if (AllData->getScreenTime() != 0)
         emit brightTimerStart(AllData->getScreenTime()*1000);
     else
         emit brightTimerStop();
-    bright = 1;
-    lcdWriteBright();
 }
 
 void lcdUI::BrightOff()
