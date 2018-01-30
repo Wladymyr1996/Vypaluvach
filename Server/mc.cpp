@@ -349,6 +349,9 @@ void MainClass::toMoving()
 //Додавання нової цифри до числа, що вводиться з клавіатури
 void MainClass::addNumberToEdit(int digit)
 {
+    if (CurrentEdit.value == "0") {
+        CurrentEdit.value = "";
+    }
     if (CurrentEdit.value.length()<8)
         CurrentEdit.value += QString::number(digit);
     printEdit();
@@ -628,6 +631,7 @@ void MainClass::keyPressed(int k)
 
         if (k == keyboardUI::KEY_D) {
             CurrentEdit.value.resize(CurrentEdit.value.length()-1);
+            if (CurrentEdit.value == "") CurrentEdit.value = "0";
             printEdit();
         }
         if (k == keyboardUI::KEY_A) saveEditValue();

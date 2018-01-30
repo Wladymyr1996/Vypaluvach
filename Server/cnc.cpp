@@ -390,8 +390,6 @@ void CNC::canReadData()
     for (int i=0; i<data.count(); i++) {
         if ((data.at(i) == msgEnd) && (yps!=NULL)) {
             sendNextLine();
-//            qDebug() << "TrnsferData->count() == " << TransferData->count()
-//                     << "yps->count() == " << yps->count();
             if ((!yps->empty())) {
                 emit newY(yps->dequeue());
             }
