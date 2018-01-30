@@ -146,7 +146,11 @@ void CNC::stop()
         }
         status = Stoped;
         port->waitForBytesWritten(1000);
-        sendCommand(new QByteArray(1, creturntoXzero), true);
+        if (PrintingWait->isActive()) {
+            PrintingWait->stop();
+            yps->clear();
+        }
+        sendCommand(new QByteArray(1, cprintPause), true);
     }
 }
 
@@ -256,12 +260,21 @@ void CNC::startPrint(QList<QList<ColorLine *> *> *lines, int beginLine)
     TransferData = new QQueue<QByteArray>;
     yps = new QQueue<int>;
 
-    setLine(beginLine);
+    sendSkippedYSteps();
+    setGetPos();
+    setMS();
 
     if (!isBusy()) {
-        status = Printing;
         setHeadOn();
-        PrintingWait->start(AllData->getPrePrintingPause());
+        QThread::msleep(500);
+        if (beginLine == 0) {
+            setCurrentPosAsZero();
+        sendCommand(QByteArray(1, (char)cprePrint));
+    }
+        else
+            sendCommand(QByteArray(1, (char)csetPrePrintingZero));
+        status = Printing;
+        PrintingWait->start(AllData->getPrePrintingPause()*1000);
     }
 }
 
@@ -306,6 +319,10 @@ void CNC::setHeadOff()
 
 void CNC::doPrinting()
 {
+    returnToZero();
+    setLine(beginLine);
+    PrintingWait->stop();
+    int cy;
     for (int cy = beginLine/AllData->getSkippedLines(); cy < lines->count()/AllData->getSkippedLines(); cy++) {
         int y = cy * AllData->getSkippedLines();
         for (int x = 0; x < lines->at(y)->count(); x++) {
@@ -325,7 +342,8 @@ void CNC::doPrinting()
         TransferData->enqueue(QByteArray(1, cendline));
         yps->enqueue(cy);
     }
-    TransferData->enqueue(QByteArray(1, creturn_to_zero));
+    TransferData->enqueue(QByteArray(1, cprintEnd));
+    yps->enqueue(cy);
 
     for (int i=0; i<10; i++) sendNextLine();
 }
@@ -340,7 +358,6 @@ void CNC::sendCommand(QByteArray *arr, bool deleteThis)
     if (port->isOpen()) {
         port->write(*arr);
         qDebug() << "Vypaluvach: " << port->portName() << port->baudRate() << arr->toHex();
-        flush(std);
 
         if (port->error()!=QSerialPort::NoError) {
             port->close();
@@ -358,13 +375,9 @@ void CNC::sendCommand(QByteArray arr)
 void CNC::canReadData()
 {
     QByteArray data = port->readAll();
-    qDebug << "CNC: " << data.toHex();
-    flush(std);
     for (int i=0; i<data.count(); i++) {
         if ((data.at(i) == msgEnd) && (yps!=NULL)) {
             sendNextLine();
-//            qDebug() << "TrnsferData->count() == " << TransferData->count()
-//                     << "yps->count() == " << yps->count();
             if ((!yps->empty())) {
                 emit newY(yps->dequeue());
             }
@@ -391,7 +404,6 @@ void CNC::canReadData()
                     setGetPos();
                 }
             }
-//            qDebug() << "CNC: end";
         } else
         if (data.at(i) == msgPos) {
             if (i+4<data.count()) {
@@ -402,7 +414,6 @@ void CNC::canReadData()
                 yh = data.at(i+4);
                 qint16 posx = xl | (xh<<8);
                 qint16 posy = yl | (yh<<8);
-               // if (xh & 0x80) posx*=-1;
 
                 emit newPosition(posx, posy);
             }

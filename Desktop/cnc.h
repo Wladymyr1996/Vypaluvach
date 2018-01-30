@@ -46,6 +46,10 @@
 #define cBuzzerOn 0x10 //Увімкнути сповіщення
 #define cBuzzerOff 0x11  //Вимкнути сповіщення
 #define csetMS 0x12
+#define cprePrint 0x14
+#define csetPrePrintingZero 0x15
+#define cprintPause 0x16
+#define cprintEnd 0x17
 
 //Відповіді від ЧПК
 #define msgEnd 'f'

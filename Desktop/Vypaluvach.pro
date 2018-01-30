@@ -47,8 +47,7 @@ SOURCES += main.cpp\
     helpwindow.cpp \
     cnc.cpp \
     cncsettingswindow.cpp \
-    alldata.cpp \
-    myserialport.cpp
+    alldata.cpp
 
 HEADERS  += mainframe.h \
     mainwidget.h \
@@ -57,8 +56,7 @@ HEADERS  += mainframe.h \
     helpwindow.h \
     cnc.h \
     cncsettingswindow.h \
-    alldata.h \
-    myserialport.h
+    alldata.h
 
 FORMS    += mainframe.ui
 
