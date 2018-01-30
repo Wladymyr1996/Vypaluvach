@@ -24,8 +24,8 @@ TAllData::TAllData(QObject *parent) : QObject(parent)
     AppSettings = new QSettings("Volodya", "Vypaluvach");
 
     AppSettings->beginGroup("/Window");
-        WindowGeometry = AppSettings->value("/Geometry", QVariant(QRect(0,
-                                                                           0,
+        WindowGeometry = AppSettings->value("/Geometry", QVariant(QRect(50,
+                                                                           50,
                                                                            500,
                                                                            400))).toRect();
     AppSettings->endGroup();
