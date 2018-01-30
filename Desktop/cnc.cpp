@@ -24,7 +24,6 @@
 #include <QThread>
 #include <QMessageBox>
 #include <QtCore/qmath.h>
-#include <QDebug>
 
 ColorLine::ColorLine(QPoint p1, QPoint p2, char cl) {
     line=QLine(p1, p2);
@@ -357,8 +356,6 @@ void CNC::sendCommand(QByteArray *arr, bool deleteThis)
 {
     if (port->isOpen()) {
         port->write(*arr);
-        qDebug() << "Vypaluvach: " << port->portName() << port->baudRate() << arr->toHex();
-
         if (port->error()!=QSerialPort::NoError) {
             port->close();
             emit isDisconnect();
