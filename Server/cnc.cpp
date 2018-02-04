@@ -395,7 +395,7 @@ void CNC::canReadData()
                 int curyps = yps->dequeue();
                 if (oldYps != curyps) {
                     oldYps = curyps;
-                    emit newY(yps->dequeue());
+                    emit newY(curyps);
                 }
             }
             else {
