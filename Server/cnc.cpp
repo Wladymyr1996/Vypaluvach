@@ -391,7 +391,12 @@ void CNC::canReadData()
         if ((data.at(i) == msgEnd) && (yps!=NULL)) {
             sendNextLine();
             if ((!yps->empty())) {
-                emit newY(yps->dequeue());
+                static int oldYps = -1;
+                int curyps = yps->dequeue();
+                if (oldYps != curyps) {
+                    oldYps = curyps;
+                    emit newY(yps->dequeue());
+                }
             }
             else {
                 if (status==Printing) {

@@ -20,7 +20,7 @@
 #ifndef ALLDATA_H
 #define ALLDATA_H
 
-#define VERSION "2.1-3"
+#define VERSION "2.1-4"
 #define APPNAME "Vypaluvach"
 
 #include <QObject>
