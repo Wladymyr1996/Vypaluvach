@@ -465,7 +465,7 @@ void MainClass::loadImage()
     }
     else {
         QList<QList<ColorLine*>*> *lines = NULL;
-        if (lines==NULL) {
+        if (lines!=NULL) {
             for (int i = 0; i<lines->count(); i++){
                 for (int j = 0; j<lines->at(i)->count(); j++)
                     delete lines->at(i)->at(j);
