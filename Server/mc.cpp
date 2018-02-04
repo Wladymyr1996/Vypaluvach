@@ -464,7 +464,6 @@ void MainClass::loadImage()
         showMessage("Not found config");
     }
     else {
-        QList<QList<ColorLine*>*> *lines = NULL;
         if (lines!=NULL) {
             for (int i = 0; i<lines->count(); i++){
                 for (int j = 0; j<lines->at(i)->count(); j++)
