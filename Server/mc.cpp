@@ -464,15 +464,15 @@ void MainClass::loadImage()
         showMessage("Not found config");
     }
     else {
+        QList<QList<ColorLine*>*> *lines = NULL;
         if (lines==NULL) {
-            QList<ColorLine*> *tmp;
-            foreach (tmp, lines) {
-                ColorLine *tmp2;
-                foreach (tmp2, tmp) {
-                    delete tmp2;
-                }
-                delete tmp;
+            for (int i = 0; i<lines->count(); i++){
+                for (int j = 0; j<lines->at(i)->count(); j++)
+                    delete lines->at(i)->at(j);
+                lines->at(i)->clear();
+                delete lines->at(i);
             }
+            lines->clear();
             delete lines;
             lines = NULL;
         }
