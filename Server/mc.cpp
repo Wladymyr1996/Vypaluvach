@@ -465,6 +465,14 @@ void MainClass::loadImage()
     }
     else {
         if (lines==NULL) {
+            QList<ColorLine*> *tmp;
+            foreach (tmp, lines) {
+                ColorLine *tmp2;
+                foreach (tmp2, tmp) {
+                    delete tmp2;
+                }
+                delete tmp;
+            }
             delete lines;
             lines = NULL;
         }
